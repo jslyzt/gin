@@ -584,6 +584,15 @@ func (c *Context) Bind(obj interface{}) error {
 	return c.MustBindWith(obj, b)
 }
 
+// BindBody bind body with cache
+func (c *Context) BindBody(obj interface{}) error {
+	b, bb := binding.DefaultBind(c.Request.Method, c.ContentType())
+	if bb != nil {
+		return c.MustBindBodyWith(obj, bb)
+	}
+	return c.MustBindWith(obj, b)
+}
+
 // BindJSON is a shortcut for c.MustBindWith(obj, binding.JSON).
 func (c *Context) BindJSON(obj interface{}) error {
 	return c.MustBindWith(obj, binding.JSON)
@@ -613,7 +622,7 @@ func (c *Context) BindHeader(obj interface{}) error {
 // It will abort the request with HTTP 400 if any error occurs.
 func (c *Context) BindURI(obj interface{}) error {
 	if err := c.ShouldBindURI(obj); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err).SetType(ErrorTypeBind) // nolint: errcheck
+		c.AbortWithError(http.StatusBadRequest, err).SetType(ErrorTypeBind)
 		return err
 	}
 	return nil
@@ -624,7 +633,16 @@ func (c *Context) BindURI(obj interface{}) error {
 // See the binding package.
 func (c *Context) MustBindWith(obj interface{}, b binding.Binding) error {
 	if err := c.ShouldBindWith(obj, b); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err).SetType(ErrorTypeBind) // nolint: errcheck
+		c.AbortWithError(http.StatusBadRequest, err).SetType(ErrorTypeBind)
+		return err
+	}
+	return nil
+}
+
+// MustBindBodyWith ShouldBindBodyWith use
+func (c *Context) MustBindBodyWith(obj interface{}, b binding.BindBody) error {
+	if err := c.ShouldBindBodyWith(obj, b); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err).SetType(ErrorTypeBind)
 		return err
 	}
 	return nil
@@ -674,7 +692,7 @@ func (c *Context) ShouldBindURI(obj interface{}) error {
 	for _, v := range c.Params {
 		m[v.Key] = []string{v.Value}
 	}
-	return binding.Uri.BindURI(m, obj)
+	return binding.URI.BindURI(m, obj)
 }
 
 // ShouldBindWith binds the passed struct pointer using the specified binding engine.
@@ -688,7 +706,7 @@ func (c *Context) ShouldBindWith(obj interface{}, b binding.Binding) error {
 //
 // NOTE: This method reads the body before binding. So you should use
 // ShouldBindWith for better performance if you need to call only once.
-func (c *Context) ShouldBindBodyWith(obj interface{}, bb binding.BindingBody) (err error) {
+func (c *Context) ShouldBindBodyWith(obj interface{}, bb binding.BindBody) (err error) {
 	var body []byte
 	if cb, ok := c.Get(BodyBytesKey); ok {
 		if cbb, ok := cb.([]byte); ok {

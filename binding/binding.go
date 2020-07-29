@@ -31,16 +31,16 @@ type Binding interface {
 	Bind(*http.Request, interface{}) error
 }
 
-// BindingBody adds BindBody method to Binding. BindBody is similar with Bind,
+// BindBody adds BindBody method to Binding. BindBody is similar with Bind,
 // but it reads the body from supplied bytes instead of req.Body.
-type BindingBody interface {
+type BindBody interface {
 	Binding
 	BindBody([]byte, interface{}) error
 }
 
-// BindingUri adds BindURI method to Binding. BindURI is similar with Bind,
+// BindURI adds BindURI method to Binding. BindURI is similar with Bind,
 // but it read the Params.
-type BindingUri interface {
+type BindURI interface {
 	Name() string
 	BindURI(map[string][]string, interface{}) error
 }
@@ -79,33 +79,53 @@ var (
 	ProtoBuf      = protobufBinding{}
 	MsgPack       = msgpackBinding{}
 	YAML          = yamlBinding{}
-	Uri           = uriBinding{}
+	URI           = uriBinding{}
 	Header        = headerBinding{}
 )
 
-// Default returns the appropriate Binding instance based on the HTTP method
-// and the content type.
-func Default(method, contentType string) Binding {
+// DefaultBind returns the appropriate Binding instance based on the HTTP method and the content type.
+func DefaultBind(method, contentType string) (Binding, BindBody) {
 	if method == http.MethodGet {
-		return Form
+		return Form, nil
+	} else if method == http.MethodPost {
+		if contentType == MIMEJSON {
+			return JSON, JSON
+		} else if contentType == MIMEXML || contentType == MIMEXML2 {
+			return XML, XML
+		} else if contentType == MIMEPROTOBUF {
+			return ProtoBuf, ProtoBuf
+		} else if contentType == MIMEMSGPACK || contentType == MIMEMSGPACK2 {
+			return MsgPack, MsgPack
+		} else if contentType == MIMEYAML {
+			return YAML, YAML
+		} else if contentType == MIMEMultipartPOSTForm {
+			return FormMultipart, nil
+		} else {
+			return Form, nil
+		}
 	}
-
 	switch contentType {
 	case MIMEJSON:
-		return JSON
+		return JSON, nil
 	case MIMEXML, MIMEXML2:
-		return XML
+		return XML, nil
 	case MIMEPROTOBUF:
-		return ProtoBuf
+		return ProtoBuf, nil
 	case MIMEMSGPACK, MIMEMSGPACK2:
-		return MsgPack
+		return MsgPack, nil
 	case MIMEYAML:
-		return YAML
+		return YAML, nil
 	case MIMEMultipartPOSTForm:
-		return FormMultipart
-	default: // case MIMEPOSTForm:
-		return Form
+		return FormMultipart, nil
+	default:
+		return Form, nil
 	}
+}
+
+// Default short for DefaultBind
+func Default(method, contentType string) Binding {
+	def, _ := DefaultBind(method, contentType)
+	return def
 }
 
 func validate(obj interface{}) error {
