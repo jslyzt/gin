@@ -285,7 +285,7 @@ var githubAPI = []route{
 	{http.MethodDelete, "/user/keys/:id"},
 }
 
-func TestShouldBindUri(t *testing.T) {
+func TestShouldBindURI(t *testing.T) {
 	DefaultWriter = os.Stdout
 	router := New()
 
@@ -295,19 +295,19 @@ func TestShouldBindUri(t *testing.T) {
 	}
 	router.Handle(http.MethodGet, "/rest/:name/:id", func(c *Context) {
 		var person Person
-		assert.NoError(t, c.ShouldBindUri(&person))
+		assert.NoError(t, c.ShouldBindURI(&person))
 		assert.True(t, "" != person.Name)
 		assert.True(t, "" != person.ID)
-		c.String(http.StatusOK, "ShouldBindUri test OK")
+		c.String(http.StatusOK, "ShouldBindURI test OK")
 	})
 
 	path, _ := exampleFromPath("/rest/:name/:id")
 	w := performRequest(router, http.MethodGet, path)
-	assert.Equal(t, "ShouldBindUri test OK", w.Body.String())
+	assert.Equal(t, "ShouldBindURI test OK", w.Body.String())
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
-func TestBindUri(t *testing.T) {
+func TestBindURI(t *testing.T) {
 	DefaultWriter = os.Stdout
 	router := New()
 
@@ -317,19 +317,19 @@ func TestBindUri(t *testing.T) {
 	}
 	router.Handle(http.MethodGet, "/rest/:name/:id", func(c *Context) {
 		var person Person
-		assert.NoError(t, c.BindUri(&person))
+		assert.NoError(t, c.BindURI(&person))
 		assert.True(t, "" != person.Name)
 		assert.True(t, "" != person.ID)
-		c.String(http.StatusOK, "BindUri test OK")
+		c.String(http.StatusOK, "BindURI test OK")
 	})
 
 	path, _ := exampleFromPath("/rest/:name/:id")
 	w := performRequest(router, http.MethodGet, path)
-	assert.Equal(t, "BindUri test OK", w.Body.String())
+	assert.Equal(t, "BindURI test OK", w.Body.String())
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
-func TestBindUriError(t *testing.T) {
+func TestBindURIError(t *testing.T) {
 	DefaultWriter = os.Stdout
 	router := New()
 
@@ -338,7 +338,7 @@ func TestBindUriError(t *testing.T) {
 	}
 	router.Handle(http.MethodGet, "/new/rest/:num", func(c *Context) {
 		var m Member
-		assert.Error(t, c.BindUri(&m))
+		assert.Error(t, c.BindURI(&m))
 	})
 
 	path1, _ := exampleFromPath("/new/rest/:num")

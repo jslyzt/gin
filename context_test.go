@@ -22,11 +22,11 @@ import (
 	"time"
 
 	"github.com/gin-contrib/sse"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/golang/protobuf/proto"
+	"github.com/jslyzt/gin/binding"
 	"github.com/stretchr/testify/assert"
 
-	testdata "github.com/gin-gonic/gin/testdata/protoexample"
+	testdata "github.com/jslyzt/gin/testdata/protoexample"
 )
 
 var _ context.Context = &Context{}
@@ -341,7 +341,7 @@ func TestContextHandlerName(t *testing.T) {
 	c, _ := CreateTestContext(httptest.NewRecorder())
 	c.handlers = HandlersChain{func(c *Context) {}, handlerNameTest}
 
-	assert.Regexp(t, "^(.*/vendor/)?github.com/gin-gonic/gin.handlerNameTest$", c.HandlerName())
+	assert.Regexp(t, "^(.*/vendor/)?github.com/jslyzt/gin.handlerNameTest$", c.HandlerName())
 }
 
 func TestContextHandlerNames(t *testing.T) {
@@ -766,7 +766,7 @@ func TestContextRenderSecureJSON(t *testing.T) {
 	w := httptest.NewRecorder()
 	c, router := CreateTestContext(w)
 
-	router.SecureJsonPrefix("&&&START&&&")
+	router.SecureJSONPrefix("&&&START&&&")
 	c.SecureJSON(http.StatusCreated, []string{"foo", "bar"})
 
 	assert.Equal(t, http.StatusCreated, w.Code)
@@ -786,11 +786,11 @@ func TestContextRenderNoContentSecureJSON(t *testing.T) {
 	assert.Equal(t, "application/json; charset=utf-8", w.Header().Get("Content-Type"))
 }
 
-func TestContextRenderNoContentAsciiJSON(t *testing.T) {
+func TestContextRenderNoContentASCIIJSON(t *testing.T) {
 	w := httptest.NewRecorder()
 	c, _ := CreateTestContext(w)
 
-	c.AsciiJSON(http.StatusNoContent, []string{"lang", "Go语言"})
+	c.ASCIIJSON(http.StatusNoContent, []string{"lang", "Go语言"})
 
 	assert.Equal(t, http.StatusNoContent, w.Code)
 	assert.Empty(t, w.Body.String())

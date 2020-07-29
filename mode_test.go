@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/gin-gonic/gin/binding"
+	"github.com/jslyzt/gin/binding"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -48,14 +48,14 @@ func TestDisableBindValidation(t *testing.T) {
 	binding.Validator = v
 }
 
-func TestEnableJsonDecoderUseNumber(t *testing.T) {
+func TestEnableJSONDecoderUseNumber(t *testing.T) {
 	assert.False(t, binding.EnableDecoderUseNumber)
-	EnableJsonDecoderUseNumber()
+	EnableJSONDecoderUseNumber()
 	assert.True(t, binding.EnableDecoderUseNumber)
 }
 
-func TestEnableJsonDecoderDisallowUnknownFields(t *testing.T) {
+func TestEnableJSONDecoderDisallowUnknownFields(t *testing.T) {
 	assert.False(t, binding.EnableDecoderDisallowUnknownFields)
-	EnableJsonDecoderDisallowUnknownFields()
+	EnableJSONDecoderDisallowUnknownFields()
 	assert.True(t, binding.EnableDecoderDisallowUnknownFields)
 }

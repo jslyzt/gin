@@ -28,7 +28,7 @@ var (
 	_ HTMLRender = HTMLProduction{}
 	_ Render     = YAML{}
 	_ Render     = Reader{}
-	_ Render     = AsciiJSON{}
+	_ Render     = ASCIIJSON{}
 	_ Render     = ProtoBuf{}
 )
 

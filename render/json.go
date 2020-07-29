@@ -10,8 +10,8 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/gin-gonic/gin/internal/bytesconv"
-	"github.com/gin-gonic/gin/internal/json"
+	"github.com/jslyzt/gin/internal/bytesconv"
+	"github.com/jslyzt/gin/internal/json"
 )
 
 // JSON contains the given interface object.
@@ -36,8 +36,8 @@ type JsonpJSON struct {
 	Data     interface{}
 }
 
-// AsciiJSON contains the given interface object.
-type AsciiJSON struct {
+// ASCIIJSON contains the given interface object.
+type ASCIIJSON struct {
 	Data interface{}
 }
 
@@ -153,8 +153,8 @@ func (r JsonpJSON) WriteContentType(w http.ResponseWriter) {
 	writeContentType(w, jsonpContentType)
 }
 
-// Render (AsciiJSON) marshals the given interface object and writes it with custom ContentType.
-func (r AsciiJSON) Render(w http.ResponseWriter) (err error) {
+// Render (ASCIIJSON) marshals the given interface object and writes it with custom ContentType.
+func (r ASCIIJSON) Render(w http.ResponseWriter) (err error) {
 	r.WriteContentType(w)
 	ret, err := json.Marshal(r.Data)
 	if err != nil {
@@ -174,8 +174,8 @@ func (r AsciiJSON) Render(w http.ResponseWriter) (err error) {
 	return err
 }
 
-// WriteContentType (AsciiJSON) writes JSON ContentType.
-func (r AsciiJSON) WriteContentType(w http.ResponseWriter) {
+// WriteContentType (ASCIIJSON) writes JSON ContentType.
+func (r ASCIIJSON) WriteContentType(w http.ResponseWriter) {
 	writeContentType(w, jsonAsciiContentType)
 }
 

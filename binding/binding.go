@@ -38,11 +38,11 @@ type BindingBody interface {
 	BindBody([]byte, interface{}) error
 }
 
-// BindingUri adds BindUri method to Binding. BindUri is similar with Bind,
+// BindingUri adds BindURI method to Binding. BindURI is similar with Bind,
 // but it read the Params.
 type BindingUri interface {
 	Name() string
-	BindUri(map[string][]string, interface{}) error
+	BindURI(map[string][]string, interface{}) error
 }
 
 // StructValidator is the minimal interface which needs to be implemented in

@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/gin-gonic/gin/binding"
+	"github.com/jslyzt/gin/binding"
 )
 
 // EnvGinMode indicates environment name for gin mode.
@@ -74,15 +74,15 @@ func DisableBindValidation() {
 	binding.Validator = nil
 }
 
-// EnableJsonDecoderUseNumber sets true for binding.EnableDecoderUseNumber to
+// EnableJSONDecoderUseNumber sets true for binding.EnableDecoderUseNumber to
 // call the UseNumber method on the JSON Decoder instance.
-func EnableJsonDecoderUseNumber() {
+func EnableJSONDecoderUseNumber() {
 	binding.EnableDecoderUseNumber = true
 }
 
-// EnableJsonDecoderDisallowUnknownFields sets true for binding.EnableDecoderDisallowUnknownFields to
+// EnableJSONDecoderDisallowUnknownFields sets true for binding.EnableDecoderDisallowUnknownFields to
 // call the DisallowUnknownFields method on the JSON Decoder instance.
-func EnableJsonDecoderDisallowUnknownFields() {
+func EnableJSONDecoderDisallowUnknownFields() {
 	binding.EnableDecoderDisallowUnknownFields = true
 }
 

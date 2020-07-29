@@ -18,8 +18,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gin-gonic/gin/testdata/protoexample"
 	"github.com/golang/protobuf/proto"
+	"github.com/jslyzt/gin/testdata/protoexample"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -704,14 +704,14 @@ func TestUriBinding(t *testing.T) {
 	var tag Tag
 	m := make(map[string][]string)
 	m["name"] = []string{"thinkerou"}
-	assert.NoError(t, b.BindUri(m, &tag))
+	assert.NoError(t, b.BindURI(m, &tag))
 	assert.Equal(t, "thinkerou", tag.Name)
 
 	type NotSupportStruct struct {
 		Name map[string]interface{} `uri:"name"`
 	}
 	var not NotSupportStruct
-	assert.Error(t, b.BindUri(m, &not))
+	assert.Error(t, b.BindURI(m, &not))
 	assert.Equal(t, map[string]interface{}(nil), not.Name)
 }
 
@@ -732,7 +732,7 @@ func TestUriInnerBinding(t *testing.T) {
 	}
 
 	var tag Tag
-	assert.NoError(t, Uri.BindUri(m, &tag))
+	assert.NoError(t, Uri.BindURI(m, &tag))
 	assert.Equal(t, tag.Name, expectedName)
 	assert.Equal(t, tag.S.Age, expectedAge)
 }

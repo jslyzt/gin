@@ -20,8 +20,8 @@ import (
 	"time"
 
 	"github.com/gin-contrib/sse"
-	"github.com/gin-gonic/gin/binding"
-	"github.com/gin-gonic/gin/render"
+	"github.com/jslyzt/gin/binding"
+	"github.com/jslyzt/gin/render"
 )
 
 // Content-Type MIME of the most common data formats.
@@ -609,10 +609,10 @@ func (c *Context) BindHeader(obj interface{}) error {
 	return c.MustBindWith(obj, binding.Header)
 }
 
-// BindUri binds the passed struct pointer using binding.Uri.
+// BindURI binds the passed struct pointer using binding.Uri.
 // It will abort the request with HTTP 400 if any error occurs.
-func (c *Context) BindUri(obj interface{}) error {
-	if err := c.ShouldBindUri(obj); err != nil {
+func (c *Context) BindURI(obj interface{}) error {
+	if err := c.ShouldBindURI(obj); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err).SetType(ErrorTypeBind) // nolint: errcheck
 		return err
 	}
@@ -668,13 +668,13 @@ func (c *Context) ShouldBindHeader(obj interface{}) error {
 	return c.ShouldBindWith(obj, binding.Header)
 }
 
-// ShouldBindUri binds the passed struct pointer using the specified binding engine.
-func (c *Context) ShouldBindUri(obj interface{}) error {
+// ShouldBindURI binds the passed struct pointer using the specified binding engine.
+func (c *Context) ShouldBindURI(obj interface{}) error {
 	m := make(map[string][]string)
 	for _, v := range c.Params {
 		m[v.Key] = []string{v.Value}
 	}
-	return binding.Uri.BindUri(m, obj)
+	return binding.Uri.BindURI(m, obj)
 }
 
 // ShouldBindWith binds the passed struct pointer using the specified binding engine.
@@ -701,6 +701,9 @@ func (c *Context) ShouldBindBodyWith(obj interface{}, bb binding.BindingBody) (e
 			return err
 		}
 		c.Set(BodyBytesKey, body)
+	}
+	if len(body) <= 0 {
+		return nil
 	}
 	return bb.BindBody(body, obj)
 }
@@ -888,10 +891,10 @@ func (c *Context) JSON(code int, obj interface{}) {
 	c.Render(code, render.JSON{Data: obj})
 }
 
-// AsciiJSON serializes the given struct as JSON into the response body with unicode to ASCII string.
+// ASCIIJSON serializes the given struct as JSON into the response body with unicode to ASCII string.
 // It also sets the Content-Type as "application/json".
-func (c *Context) AsciiJSON(code int, obj interface{}) {
-	c.Render(code, render.AsciiJSON{Data: obj})
+func (c *Context) ASCIIJSON(code int, obj interface{}) {
+	c.Render(code, render.ASCIIJSON{Data: obj})
 }
 
 // PureJSON serializes the given struct as JSON into the response body.
